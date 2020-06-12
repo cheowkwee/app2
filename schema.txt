@@ -1,4 +1,4 @@
-
+psql -U postgres -d karely -a -f list.sql
 \d+ karely_user_group;
                                                             Table "public.karely_user_group"
    Column   |            Type             | Collation | Nullable |                    Default                    | Storage  | Stats target | Description 
@@ -14,38 +14,45 @@ Referenced by:
     TABLE "karely_user_group_link" CONSTRAINT "karely_user_group_link_group_id_fkey" FOREIGN KEY (group_id) REFERENCES karely_user_group(id) ON DELETE CASCADE
 Access method: heap
 
-SELECT * from karely_user_group;
- id | group_name |         created_on         |         updated_on         
-----+------------+----------------------------+----------------------------
-  1 | KARELY     | 2020-05-19 20:31:16.07756  | 2020-05-19 20:31:16.07756
-  2 | ADMIN      | 2020-05-19 20:31:16.078204 | 2020-05-19 20:31:16.078204
-(2 rows)
-
-
-
 \d+ karely_user;
-                                                             Table "public.karely_user"
-    Column    |            Type             | Collation | Nullable |                 Default                 | Storage  | Stats target | Description 
---------------+-----------------------------+-----------+----------+-----------------------------------------+----------+--------------+-------------
- id           | integer                     |           | not null | nextval('karely_user_id_seq'::regclass) | plain    |              | 
- first_name   | character varying(50)       |           |          |                                         | extended |              | 
- last_name    | character varying(50)       |           |          |                                         | extended |              | 
- email        | character varying(255)      |           |          |                                         | extended |              | 
- phone_number | character varying(255)      |           |          |                                         | extended |              | 
- password     | character varying(50)       |           |          |                                         | extended |              | 
- avatar       | text                        |           |          |                                         | extended |              | 
- biography    | text                        |           |          |                                         | extended |              | 
- account_type | integer                     |           | not null | 0                                       | plain    |              | 
- created_on   | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                       | plain    |              | 
- updated_on   | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                       | plain    |              | 
+                                                                   Table "public.karely_user"
+         Column          |            Type             | Collation | Nullable |                 Default                 | Storage  | Stats target | Description 
+-------------------------+-----------------------------+-----------+----------+-----------------------------------------+----------+--------------+-------------
+ id                      | integer                     |           | not null | nextval('karely_user_id_seq'::regclass) | plain    |              | 
+ first_name              | character varying(255)      |           |          |                                         | extended |              | 
+ last_name               | character varying(255)      |           |          |                                         | extended |              | 
+ email                   | character varying(255)      |           |          |                                         | extended |              | 
+ phone_number            | character varying(255)      |           |          |                                         | extended |              | 
+ password                | character varying(255)      |           |          |                                         | extended |              | 
+ avatar                  | text                        |           |          |                                         | extended |              | 
+ biography               | text                        |           |          |                                         | extended |              | 
+ account_type            | integer                     |           | not null | 0                                       | plain    |              | 
+ account_id              | character varying(255)      |           |          |                                         | extended |              | 
+ status                  | integer                     |           | not null | 0                                       | plain    |              | 
+ login_failed_count      | integer                     |           | not null | 0                                       | plain    |              | 
+ last_login_on           | timestamp without time zone |           |          |                                         | plain    |              | 
+ email_verification_flag | boolean                     |           | not null | false                                   | plain    |              | 
+ email_verification_on   | timestamp without time zone |           |          |                                         | plain    |              | 
+ email_show_flag         | boolean                     |           | not null | false                                   | plain    |              | 
+ phone_verification_flag | boolean                     |           | not null | false                                   | plain    |              | 
+ phone_verification_on   | timestamp without time zone |           |          |                                         | plain    |              | 
+ phone_show_flag         | boolean                     |           | not null | false                                   | plain    |              | 
+ created_on              | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                       | plain    |              | 
+ updated_on              | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                       | plain    |              | 
 Indexes:
     "karely_user_pkey" PRIMARY KEY, btree (id)
-    "karely_user_email_key" UNIQUE CONSTRAINT, btree (email)
-    "karely_user_phone_number_key" UNIQUE CONSTRAINT, btree (phone_number)
+    "karely_user_idx_1" UNIQUE, btree (account_type, email)
+    "karely_user_idx_2" UNIQUE, btree (account_type, account_id)
 Referenced by:
+    TABLE "karely_cause_action_fundraising" CONSTRAINT "karely_cause_action_fundraising_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
+    TABLE "karely_cause_action_product" CONSTRAINT "karely_cause_action_product_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
+    TABLE "karely_cause_action_todo" CONSTRAINT "karely_cause_action_todo_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
+    TABLE "karely_cause_action_todo_volunteer" CONSTRAINT "karely_cause_action_todo_volunteer_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
     TABLE "karely_cause_comment" CONSTRAINT "karely_cause_comment_comment_by_fkey" FOREIGN KEY (comment_by) REFERENCES karely_user(id) ON DELETE CASCADE
     TABLE "karely_cause_member" CONSTRAINT "karely_cause_member_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
     TABLE "karely_cause_update" CONSTRAINT "karely_cause_update_update_by_fkey" FOREIGN KEY (update_by) REFERENCES karely_user(id) ON DELETE CASCADE
+    TABLE "karely_cause" CONSTRAINT "karely_cause_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
+    TABLE "karely_product" CONSTRAINT "karely_product_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
     TABLE "karely_user_group_link" CONSTRAINT "karely_user_group_link_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
     TABLE "karely_user_session" CONSTRAINT "karely_user_session_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
     TABLE "karely_user_setting" CONSTRAINT "karely_user_setting_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
@@ -69,17 +76,17 @@ Foreign-key constraints:
 Access method: heap
 
 \d+ karely_user_session;
-                                              Table "public.karely_user_session"
-    Column    |            Type             | Collation | Nullable |      Default      | Storage  | Stats target | Description 
---------------+-----------------------------+-----------+----------+-------------------+----------+--------------+-------------
- token        | character varying(255)      |           | not null |                   | extended |              | 
- user_id      | integer                     |           |          |                   | plain    |              | 
- remark       | character varying(255)      |           |          |                   | extended |              | 
- metadata     | text                        |           |          |                   | extended |              | 
- session_type | integer                     |           | not null | 0                 | plain    |              | 
- expired_on   | timestamp without time zone |           |          |                   | plain    |              | 
- created_on   | timestamp without time zone |           | not null | CURRENT_TIMESTAMP | plain    |              | 
- updated_on   | timestamp without time zone |           | not null | CURRENT_TIMESTAMP | plain    |              | 
+                                                 Table "public.karely_user_session"
+       Column       |            Type             | Collation | Nullable |      Default      | Storage  | Stats target | Description 
+--------------------+-----------------------------+-----------+----------+-------------------+----------+--------------+-------------
+ token              | character varying(255)      |           | not null |                   | extended |              | 
+ user_id            | integer                     |           |          |                   | plain    |              | 
+ remark             | character varying(255)      |           |          |                   | extended |              | 
+ authorization_code | character varying(50)       |           |          |                   | extended |              | 
+ session_type       | integer                     |           | not null | 0                 | plain    |              | 
+ expired_on         | timestamp without time zone |           |          |                   | plain    |              | 
+ created_on         | timestamp without time zone |           | not null | CURRENT_TIMESTAMP | plain    |              | 
+ updated_on         | timestamp without time zone |           | not null | CURRENT_TIMESTAMP | plain    |              | 
 Indexes:
     "karely_user_session_pkey" PRIMARY KEY, btree (token)
 Foreign-key constraints:
@@ -87,14 +94,32 @@ Foreign-key constraints:
 Access method: heap
 
 \d+ karely_user_setting;
-                                                           Table "public.karely_user_setting"
-    Column     |         Type          | Collation | Nullable |                     Default                     | Storage  | Stats target | Description 
----------------+-----------------------+-----------+----------+-------------------------------------------------+----------+--------------+-------------
- id            | integer               |           | not null | nextval('karely_user_setting_id_seq'::regclass) | plain    |              | 
- user_id       | integer               |           |          |                                                 | plain    |              | 
- setting_group | character varying(50) |           |          |                                                 | extended |              | 
- name          | character varying(50) |           |          |                                                 | extended |              | 
- value         | boolean               |           | not null | false                                           | plain    |              | 
+                                                               Table "public.karely_user_setting"
+                Column                 |  Type   | Collation | Nullable |                     Default                     | Storage | Stats target | Description 
+---------------------------------------+---------+-----------+----------+-------------------------------------------------+---------+--------------+-------------
+ id                                    | integer |           | not null | nextval('karely_user_setting_id_seq'::regclass) | plain   |              | 
+ user_id                               | integer |           |          |                                                 | plain   |              | 
+ message_flag                          | boolean |           | not null | false                                           | plain   |              | 
+ cause_pause_all_flag                  | boolean |           | not null | false                                           | plain   |              | 
+ cause_general_info_update_flag        | boolean |           | not null | false                                           | plain   |              | 
+ cause_new_status_added_flag           | boolean |           | not null | false                                           | plain   |              | 
+ cause_status_update_flag              | boolean |           | not null | false                                           | plain   |              | 
+ cause_reply_to_my_comment_flag        | boolean |           | not null | false                                           | plain   |              | 
+ cause_new_action_added_flag           | boolean |           | not null | false                                           | plain   |              | 
+ cause_new_member_join_flag            | boolean |           | not null | false                                           | plain   |              | 
+ cause_other_member_taking_action_flag | boolean |           | not null | false                                           | plain   |              | 
+ admin_pause_all_flag                  | boolean |           | not null | false                                           | plain   |              | 
+ admin_new_todo_sign_up_flag           | boolean |           | not null | false                                           | plain   |              | 
+ admin_new_event_sign_up_flag          | boolean |           | not null | false                                           | plain   |              | 
+ admin_receive_fund_flag               | boolean |           | not null | false                                           | plain   |              | 
+ admin_receive_product_flag            | boolean |           | not null | false                                           | plain   |              | 
+ admin_new_comment_flag                | boolean |           | not null | false                                           | plain   |              | 
+ product_update_flag                   | boolean |           | not null | false                                           | plain   |              | 
+ cause_weekly_digest_email_flag        | boolean |           | not null | false                                           | plain   |              | 
+ cause_product_update_email_flag       | boolean |           | not null | false                                           | plain   |              | 
+ cause_product_newletter_email_flag    | boolean |           | not null | false                                           | plain   |              | 
+ feedback_email_flag                   | boolean |           | not null | false                                           | plain   |              | 
+ sms_message_flag                      | boolean |           | not null | false                                           | plain   |              | 
 Indexes:
     "karely_user_setting_pkey" PRIMARY KEY, btree (id)
 Foreign-key constraints:
@@ -102,39 +127,53 @@ Foreign-key constraints:
 Access method: heap
 
 \d+ karely_user_stat;
-                                                           Table "public.karely_user_stat"
-    Column     |         Type          | Collation | Nullable |                   Default                    | Storage  | Stats target | Description 
----------------+-----------------------+-----------+----------+----------------------------------------------+----------+--------------+-------------
- id            | integer               |           | not null | nextval('karely_user_stat_id_seq'::regclass) | plain    |              | 
- user_id       | integer               |           |          |                                              | plain    |              | 
- setting_group | character varying(50) |           |          |                                              | extended |              | 
- stat_name     | character varying(50) |           |          |                                              | extended |              | 
- stat_group    | character varying(50) |           |          |                                              | extended |              | 
- stat_type     | character varying(50) |           |          |                                              | extended |              | 
- stat_total    | numeric(5,2)          |           |          |                                              | main     |              | 
+                                                            Table "public.karely_user_stat"
+          Column           |     Type      | Collation | Nullable |                   Default                    | Storage | Stats target | Description 
+---------------------------+---------------+-----------+----------+----------------------------------------------+---------+--------------+-------------
+ id                        | integer       |           | not null | nextval('karely_user_stat_id_seq'::regclass) | plain   |              | 
+ user_id                   | integer       |           |          |                                              | plain   |              | 
+ followed_cause_count      | integer       |           |          | 0                                            | plain   |              | 
+ owned_cause_count         | integer       |           |          | 0                                            | plain   |              | 
+ contributed_hours         | integer       |           |          | 0                                            | plain   |              | 
+ product_contributed_count | integer       |           |          | 0                                            | plain   |              | 
+ badges_collected_count    | integer       |           |          | 0                                            | plain   |              | 
+ donated_amount            | numeric(12,2) |           |          | 0                                            | main    |              | 
 Indexes:
     "karely_user_stat_pkey" PRIMARY KEY, btree (id)
 Foreign-key constraints:
     "karely_user_stat_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
 Access method: heap
 
-
 \d+ karely_cause;
-                                                             Table "public.karely_cause"
-   Column    |            Type             | Collation | Nullable |                 Default                  | Storage  | Stats target | Description 
--------------+-----------------------------+-----------+----------+------------------------------------------+----------+--------------+-------------
- id          | integer                     |           | not null | nextval('karely_cause_id_seq'::regclass) | plain    |              | 
- title       | character varying(50)       |           | not null |                                          | extended |              | 
- story       | text                        |           | not null |                                          | extended |              | 
- visibility  | boolean                     |           | not null | false                                    | plain    |              | 
- cause_type  | integer                     |           | not null | 0                                        | plain    |              | 
- photo       | text                        |           |          |                                          | extended |              | 
- beneficiary | text                        |           |          |                                          | extended |              | 
- created_on  | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                        | plain    |              | 
- updated_on  | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                        | plain    |              | 
+                                                                  Table "public.karely_cause"
+         Column         |            Type             | Collation | Nullable |                 Default                  | Storage  | Stats target | Description 
+------------------------+-----------------------------+-----------+----------+------------------------------------------+----------+--------------+-------------
+ id                     | integer                     |           | not null | nextval('karely_cause_id_seq'::regclass) | plain    |              | 
+ user_id                | integer                     |           |          |                                          | plain    |              | 
+ title                  | character varying(50)       |           | not null |                                          | extended |              | 
+ story                  | text                        |           | not null |                                          | extended |              | 
+ visibility             | boolean                     |           | not null | false                                    | plain    |              | 
+ cause_type             | integer                     |           | not null | 0                                        | plain    |              | 
+ cause_related_1        | character varying(50)       |           |          |                                          | extended |              | 
+ cause_related_2        | character varying(50)       |           |          |                                          | extended |              | 
+ cause_related_3        | character varying(50)       |           |          |                                          | extended |              | 
+ photo                  | text                        |           |          |                                          | extended |              | 
+ beneficiary_flag       | boolean                     |           | not null | false                                    | plain    |              | 
+ beneficiary_first_name | character varying(50)       |           |          |                                          | extended |              | 
+ beneficiary_last_name  | character varying(50)       |           |          |                                          | extended |              | 
+ beneficiary_email      | character varying(255)      |           |          |                                          | extended |              | 
+ created_on             | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                        | plain    |              | 
+ updated_on             | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                        | plain    |              | 
 Indexes:
     "karely_cause_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "karely_cause_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
 Referenced by:
+    TABLE "karely_cause_action" CONSTRAINT "karely_cause_action_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
+    TABLE "karely_cause_action_fundraising" CONSTRAINT "karely_cause_action_fundraising_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
+    TABLE "karely_cause_action_product" CONSTRAINT "karely_cause_action_product_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
+    TABLE "karely_cause_action_todo" CONSTRAINT "karely_cause_action_todo_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
+    TABLE "karely_cause_action_todo_volunteer" CONSTRAINT "karely_cause_action_todo_volunteer_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
     TABLE "karely_cause_comment" CONSTRAINT "karely_cause_comment_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
     TABLE "karely_cause_member" CONSTRAINT "karely_cause_member_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
     TABLE "karely_cause_update" CONSTRAINT "karely_cause_update_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
@@ -148,6 +187,7 @@ Access method: heap
  cause_id   | integer                     |           |          |                                                 | plain    |              | 
  update_by  | integer                     |           |          |                                                 | plain    |              | 
  message    | text                        |           |          |                                                 | extended |              | 
+ status     | integer                     |           | not null | 0                                               | plain    |              | 
  created_on | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                               | plain    |              | 
  updated_on | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                               | plain    |              | 
 Indexes:
@@ -167,6 +207,7 @@ Access method: heap
  message        | text                        |           |          |                                                  | extended |              | 
  comment_target | integer                     |           |          |                                                  | plain    |              | 
  comment_level  | integer                     |           |          |                                                  | plain    |              | 
+ status         | integer                     |           | not null | 0                                                | plain    |              | 
  created_on     | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                                | plain    |              | 
  updated_on     | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                                | plain    |              | 
 Indexes:
@@ -183,6 +224,8 @@ Access method: heap
  id         | integer                     |           | not null | nextval('karely_cause_member_id_seq'::regclass) | plain   |              | 
  cause_id   | integer                     |           |          |                                                 | plain   |              | 
  user_id    | integer                     |           |          |                                                 | plain   |              | 
+ admin_flag | boolean                     |           | not null | false                                           | plain   |              | 
+ status     | boolean                     |           | not null | false                                           | plain   |              | 
  created_on | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                               | plain   |              | 
  updated_on | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                               | plain   |              | 
 Indexes:
@@ -192,58 +235,136 @@ Foreign-key constraints:
     "karely_cause_member_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
 Access method: heap
 
+\d+ karely_cause_action;
+                                                             Table "public.karely_cause_action"
+   Column    |            Type             | Collation | Nullable |                     Default                     | Storage  | Stats target | Description 
+-------------+-----------------------------+-----------+----------+-------------------------------------------------+----------+--------------+-------------
+ id          | integer                     |           | not null | nextval('karely_cause_action_id_seq'::regclass) | plain    |              | 
+ cause_id    | integer                     |           |          |                                                 | plain    |              | 
+ action_type | integer                     |           | not null | 0                                               | plain    |              | 
+ action_id   | integer                     |           |          |                                                 | plain    |              | 
+ priority    | integer                     |           |          |                                                 | plain    |              | 
+ status      | integer                     |           |          |                                                 | plain    |              | 
+ title       | character varying(50)       |           | not null |                                                 | extended |              | 
+ description | text                        |           |          |                                                 | extended |              | 
+ created_on  | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                               | plain    |              | 
+ updated_on  | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                               | plain    |              | 
+Indexes:
+    "karely_cause_action_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "karely_cause_action_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
+Referenced by:
+    TABLE "karely_cause_action_fundraising" CONSTRAINT "karely_cause_action_fundraising_action_id_fkey" FOREIGN KEY (action_id) REFERENCES karely_cause_action(id) ON DELETE CASCADE
+    TABLE "karely_cause_action_product" CONSTRAINT "karely_cause_action_product_action_id_fkey" FOREIGN KEY (action_id) REFERENCES karely_cause_action(id) ON DELETE CASCADE
+    TABLE "karely_cause_action_todo" CONSTRAINT "karely_cause_action_todo_action_id_fkey" FOREIGN KEY (action_id) REFERENCES karely_cause_action(id) ON DELETE CASCADE
+    TABLE "karely_cause_action_todo_volunteer" CONSTRAINT "karely_cause_action_todo_volunteer_action_id_fkey" FOREIGN KEY (action_id) REFERENCES karely_cause_action(id) ON DELETE CASCADE
+Access method: heap
+
+\d+ karely_cause_action_fundraising;
+                                    Table "public.karely_cause_action_fundraising"
+     Column     |            Type             | Collation | Nullable | Default | Storage | Stats target | Description 
+----------------+-----------------------------+-----------+----------+---------+---------+--------------+-------------
+ action_id      | integer                     |           |          |         | plain   |              | 
+ cause_id       | integer                     |           |          |         | plain   |              | 
+ user_id        | integer                     |           |          |         | plain   |              | 
+ goal_amount    | numeric(13,4)               |           | not null |         | main    |              | 
+ currency_type  | integer                     |           |          |         | plain   |              | 
+ deadline       | timestamp without time zone |           |          |         | plain   |              | 
+ routing_number | integer                     |           |          |         | plain   |              | 
+ account_number | integer                     |           |          |         | plain   |              | 
+Foreign-key constraints:
+    "karely_cause_action_fundraising_action_id_fkey" FOREIGN KEY (action_id) REFERENCES karely_cause_action(id) ON DELETE CASCADE
+    "karely_cause_action_fundraising_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
+    "karely_cause_action_fundraising_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
+Access method: heap
+
+\d+ karely_cause_action_product;
+                            Table "public.karely_cause_action_product"
+     Column     |  Type   | Collation | Nullable | Default | Storage | Stats target | Description 
+----------------+---------+-----------+----------+---------+---------+--------------+-------------
+ action_id      | integer |           |          |         | plain   |              | 
+ cause_id       | integer |           |          |         | plain   |              | 
+ user_id        | integer |           |          |         | plain   |              | 
+ product_id     | integer |           |          |         | plain   |              | 
+ goal_quantity  | integer |           |          |         | plain   |              | 
+ routing_number | integer |           |          |         | plain   |              | 
+ account_number | integer |           |          |         | plain   |              | 
+Foreign-key constraints:
+    "karely_cause_action_product_action_id_fkey" FOREIGN KEY (action_id) REFERENCES karely_cause_action(id) ON DELETE CASCADE
+    "karely_cause_action_product_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
+    "karely_cause_action_product_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
+Access method: heap
 
 \d+ karely_cause_action_todo;
                                                               Table "public.karely_cause_action_todo"
      Column     |            Type             | Collation | Nullable |                       Default                        | Storage  | Stats target | Description 
 ----------------+-----------------------------+-----------+----------+------------------------------------------------------+----------+--------------+-------------
  id             | integer                     |           | not null | nextval('karely_cause_action_todo_id_seq'::regclass) | plain    |              | 
+ action_id      | integer                     |           |          |                                                      | plain    |              | 
  cause_id       | integer                     |           |          |                                                      | plain    |              | 
- title          | character varying(50)       |           | not null |                                                      | extended |              | 
- description    | text                        |           |          |                                                      | extended |              | 
+ user_id        | integer                     |           |          |                                                      | plain    |              | 
  fix_volunteers | boolean                     |           | not null | false                                                | plain    |              | 
  volunteers     | integer                     |           |          |                                                      | plain    |              | 
  recurrence     | integer                     |           |          |                                                      | plain    |              | 
  start_location | text                        |           |          |                                                      | extended |              | 
  end_location   | text                        |           |          |                                                      | extended |              | 
- created_on     | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                                    | plain    |              | 
- updated_on     | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                                    | plain    |              | 
+ start_time     | timestamp without time zone |           | not null |                                                      | plain    |              | 
+ end_time       | timestamp without time zone |           | not null |                                                      | plain    |              | 
 Indexes:
     "karely_cause_action_todo_pkey" PRIMARY KEY, btree (id)
 Foreign-key constraints:
+    "karely_cause_action_todo_action_id_fkey" FOREIGN KEY (action_id) REFERENCES karely_cause_action(id) ON DELETE CASCADE
     "karely_cause_action_todo_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
+    "karely_cause_action_todo_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
 Access method: heap
 
-\d+ karely_cause_action_fundraising;
-                                                             Table "public.karely_cause_action_fundraising"
-   Column    |            Type             | Collation | Nullable |                           Default                           | Storage  | Stats target | Description 
--------------+-----------------------------+-----------+----------+-------------------------------------------------------------+----------+--------------+-------------
- id          | integer                     |           | not null | nextval('karely_cause_action_fundraising_id_seq'::regclass) | plain    |              | 
- cause_id    | integer                     |           |          |                                                             | plain    |              | 
- title       | character varying(50)       |           | not null |                                                             | extended |              | 
- description | text                        |           |          |                                                             | extended |              | 
- created_on  | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                                           | plain    |              | 
- updated_on  | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                                           | plain    |              | 
+\d+ karely_cause_action_todo_volunteer;
+                                                            Table "public.karely_cause_action_todo_volunteer"
+   Column   |            Type             | Collation | Nullable |                            Default                             | Storage | Stats target | Description 
+------------+-----------------------------+-----------+----------+----------------------------------------------------------------+---------+--------------+-------------
+ id         | integer                     |           | not null | nextval('karely_cause_action_todo_volunteer_id_seq'::regclass) | plain   |              | 
+ action_id  | integer                     |           |          |                                                                | plain   |              | 
+ cause_id   | integer                     |           |          |                                                                | plain   |              | 
+ user_id    | integer                     |           |          |                                                                | plain   |              | 
+ status     | integer                     |           |          |                                                                | plain   |              | 
+ created_on | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                                              | plain   |              | 
+ updated_on | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                                              | plain   |              | 
 Indexes:
-    "karely_cause_action_fundraising_pkey" PRIMARY KEY, btree (id)
+    "karely_cause_action_todo_volunteer_pkey" PRIMARY KEY, btree (id)
 Foreign-key constraints:
-    "karely_cause_action_fundraising_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
+    "karely_cause_action_todo_volunteer_action_id_fkey" FOREIGN KEY (action_id) REFERENCES karely_cause_action(id) ON DELETE CASCADE
+    "karely_cause_action_todo_volunteer_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
+    "karely_cause_action_todo_volunteer_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
 Access method: heap
 
-\d+ karely_cause_action_product;
-                                                             Table "public.karely_cause_action_product"
-   Column    |            Type             | Collation | Nullable |                         Default                         | Storage  | Stats target | Description 
--------------+-----------------------------+-----------+----------+---------------------------------------------------------+----------+--------------+-------------
- id          | integer                     |           | not null | nextval('karely_cause_action_product_id_seq'::regclass) | plain    |              | 
- cause_id    | integer                     |           |          |                                                         | plain    |              | 
- title       | character varying(50)       |           | not null |                                                         | extended |              | 
- description | text                        |           |          |                                                         | extended |              | 
- created_on  | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                                       | plain    |              | 
- updated_on  | timestamp without time zone |           | not null | CURRENT_TIMESTAMP                                       | plain    |              | 
-Indexes:
-    "karely_cause_action_product_pkey" PRIMARY KEY, btree (id)
+\d+ karely_product;
+                                                    Table "public.karely_product"
+       Column        |            Type             | Collation | Nullable |      Default      | Storage  | Stats target | Description 
+---------------------+-----------------------------+-----------+----------+-------------------+----------+--------------+-------------
+ product_id          | integer                     |           |          |                   | plain    |              | 
+ user_id             | integer                     |           |          |                   | plain    |              | 
+ product_type        | integer                     |           |          |                   | plain    |              | 
+ brand               | text                        |           |          |                   | extended |              | 
+ product_name        | text                        |           |          |                   | extended |              | 
+ product_description | text                        |           |          |                   | extended |              | 
+ rating              | numeric(13,4)               |           |          |                   | main     |              | 
+ quantity            | integer                     |           |          |                   | plain    |              | 
+ price               | numeric(13,4)               |           | not null |                   | main     |              | 
+ currency_type       | integer                     |           |          |                   | plain    |              | 
+ photo               | text                        |           |          |                   | extended |              | 
+ status              | integer                     |           |          |                   | plain    |              | 
+ shipping_from       | text                        |           |          |                   | extended |              | 
+ shipping_fee        | numeric(13,4)               |           |          |                   | main     |              | 
+ created_on          | timestamp without time zone |           | not null | CURRENT_TIMESTAMP | plain    |              | 
+ updated_on          | timestamp without time zone |           | not null | CURRENT_TIMESTAMP | plain    |              | 
 Foreign-key constraints:
-    "karely_cause_action_product_cause_id_fkey" FOREIGN KEY (cause_id) REFERENCES karely_cause(id) ON DELETE CASCADE
+    "karely_product_user_id_fkey" FOREIGN KEY (user_id) REFERENCES karely_user(id) ON DELETE CASCADE
 Access method: heap
 
+SELECT * from karely_user_group;
+ id | group_name |         created_on         |         updated_on         
+----+------------+----------------------------+----------------------------
+  1 | KARELY     | 2020-06-11 01:46:08.796171 | 2020-06-11 01:46:08.796171
+  2 | ADMIN      | 2020-06-11 01:46:08.802998 | 2020-06-11 01:46:08.802998
+(2 rows)
 
