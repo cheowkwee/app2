@@ -1,5 +1,6 @@
 var CryptoJS = require("crypto-js");
 
+require('dotenv').config();
 var knex = require('./db');
 var api = require('./userApi');
 
@@ -79,19 +80,48 @@ var testUpdateUserPassword = async function()
 	console.log("Test result:", result);
 };
 
+var testRemoveGroupLink = async function()
+{
+	result = await api.removeUserFromGroupWithEmail('cheowkwee@hotmail.com', 'ADMIN');	
+	console.log("Test result:", result);
+};
+
+var testUserGroupLink = async function()
+{
+	var result = {};
+	// result = await api.removeUserFromGroupWithEmail('cheowkwee@hotmail.com', 'ADMIN');	
+	// console.log("Test result:", result);
+	// result = await api.removeUserFromGroupWithEmail('cheowkwee@hotmail.com', 'KARELY');	
+	// console.log("Test result:", result);
+	// console.log("----------------------------");
+	// result = await api.addUser2GroupWithEmail('cheowkwee@hotmail.com', 'KARELY');	
+	// console.log("Test result:", result);
+	// result = await api.addUser2GroupWithEmail('cheowkwee@hotmail.com', 'ADMIN');	
+	// console.log("Test result:", result);
+	// console.log("----------------------------");
+	result = await api.getUserGroupLinkList(4);	
+	console.log("Test result:", result);
+	console.log("----------------------------");
+	var user = await api.getUserWithEmail('cheowkwee@hotmail.com');	
+	console.log("Test result:", result);
+	result = await api.checkUserGroup(user.id, "KARELY");	
+	console.log("Test result:", result);
+};
 var main = async function() {
 	try {
-		await fun1();
-		console.log("----------------------------");
-		await testUpdateUserPassword();
-		console.log("----------------------------");
-		await fun1();
+		// await fun1();
+		// console.log("----------------------------");
+		// await testUpdateUserPassword();
+		// console.log("----------------------------");
+		// await fun1();
 		// await testSignUp();
 		// await testVerifyAuthorizationCode();
 		// await testLogin();
 		// await testVerifyToken();
 		// await testLogout();
 		// await testResetPassword();
+		await testRemoveGroupLink();
+		await testUserGroupLink();
 
 	} catch (err) {
 		console.log("Exception", err);
