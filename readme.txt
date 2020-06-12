@@ -4,6 +4,7 @@
 
 psql -U postgres -d karely -a -f karely.sql
 
+
 3) Change the configuration in .env (sample as below)
 
 $ cat .env
@@ -43,5 +44,4 @@ Implement check user group
 Implement List users, get user info, update and delete user
 Implement user group check and access token verify on above function
 Append function to user_guide.txt
-
 
