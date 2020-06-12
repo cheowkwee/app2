@@ -1,5 +1,6 @@
-
 const nodemailer = require('nodemailer');
+
+require('dotenv').config();
 
 // const config = require('./config.js')['application'];
 
@@ -40,5 +41,27 @@ let transporter = nodemailer.createTransport({
 });
 
 
-module.exports = transporter;
+let mailOptions = {
+	from: mailServerUser,
+	to: 'cheowkwee@hotmail.com',
+	subject: 'Sending Email using Node.js',
+	text: 'That was easy! ' + new Date()
+};
+
+
+var main = async function() {
+	/*
+	transporter.sendMail(mailOptions, function(error, info) {
+	 	if (error) console.log(error);
+	 	else console.log('Email sent: ' + info.response);
+	});
+	*/
+	var result = await transporter.sendMail(mailOptions); 
+	console.log("Message ID:", result.messageId);
+	console.log("Result:", result);
+
+	return;
+};
+
+main().catch(console.error);
 
