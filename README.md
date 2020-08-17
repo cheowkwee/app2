@@ -31,7 +31,7 @@ MAIL_SERVER_PASSWORD='xxxxx'
 * Sign up, verify authorization code (email)
 * Reset password (link), update passowrd
 
-Note: Above function 70% completed, some feature still under development (password fail count check, user record CRUD on permission check and etc) ...
+**Note: Above function 70% completed, some feature still under development (password fail count check, user record CRUD on permission check and etc) ...**
 
 ## 4 Jun 2020 update
 * Implement express center error handling, KarelyError class and error code standard 
