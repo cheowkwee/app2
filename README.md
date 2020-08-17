@@ -2,14 +2,14 @@
 Karely backend API application server
 
 # Installation guide
-1. After clone run npm install
+1. After clone run `npm install`
 2. To create or update the database schema run below
-```
+```shell
 $ psql -U postgres -d karely -a -f karely.sql
 ```
 
 3. Change the configuration in .env (sample as below)
-```
+```shell
 $ cat .env
 DB_URL=postgres://user:password@localhost:5432/karely
 DB_DEBUG=false
@@ -31,7 +31,7 @@ MAIL_SERVER_PASSWORD='xxxxx'
 * Sign up, verify authorization code (email)
 * Reset password (link), update passowrd
 
-Note: Above function 70% completed, some feature still under development (password fail count check, user record CRUD on permission check and etc) ...
+> Note: Above function 70% completed, some feature still under development (password fail count check, user record CRUD on permission check and etc) ...
 
 ## 4 Jun 2020 update
 * Implement express center error handling, KarelyError class and error code standard 
@@ -78,7 +78,7 @@ Note: Above function 70% completed, some feature still under development (passwo
 ## 10 Jul 2020
 * Enhance cause banner loading API
 * Add change user account email API
-* Schema change and update (karely_cause_action_todo_address, karely_cause_action_todo_volunteer)
+* Schema change and update (karely\_cause\_action\_todo\_address, karely\_cause\_action\_todo\_volunteer)
 * Cause API action and action volunteers update, include enrich output, validation, implement new field
 * Bug fix previous week implement API
 * Cause guide and user guide document update 
