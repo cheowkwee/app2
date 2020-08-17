@@ -4,12 +4,12 @@ Karely backend API application server
 # Installation guide
 1. After clone run `npm install`
 2. To create or update the database schema run below
-```shell
+```bash
 $ psql -U postgres -d karely -a -f karely.sql
 ```
 
 3. Change the configuration in .env (sample as below)
-```shell
+```bash
 $ cat .env
 DB_URL=postgres://user:password@localhost:5432/karely
 DB_DEBUG=false
@@ -31,7 +31,7 @@ MAIL_SERVER_PASSWORD='xxxxx'
 * Sign up, verify authorization code (email)
 * Reset password (link), update passowrd
 
-> Note: Above function 70% completed, some feature still under development (password fail count check, user record CRUD on permission check and etc) ...
+Note: Above function 70% completed, some feature still under development (password fail count check, user record CRUD on permission check and etc) ...
 
 ## 4 Jun 2020 update
 * Implement express center error handling, KarelyError class and error code standard 
@@ -39,7 +39,7 @@ MAIL_SERVER_PASSWORD='xxxxx'
 * Implement controller 
 * Change var to const or let
 * Update the express version from 4 to 5 Alpha 8
-* Update on schema karely\_user, karely\_user\_setting, karely\_user\_stat
+* Update on schema karely_user, karely_user_setting, karely_user_stat
 * Implement user group to user account
 
 ## 8 Jun 2020 update
