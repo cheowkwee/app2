@@ -33,7 +33,7 @@ MAIL_SERVER_PASSWORD='xxxxx'
 
 **Note: Above function 70% completed, some feature still under development (password fail count check, user record CRUD on permission check and etc) ...**
 
-## 4 Jun 2020 update
+## 4 Jun 2020 
 * Implement express center error handling, KarelyError class and error code standard 
 * Implement dotenv and remove config.js file
 * Implement controller 
@@ -42,34 +42,34 @@ MAIL_SERVER_PASSWORD='xxxxx'
 * Update on schema karely_user, karely_user_setting, karely_user_stat
 * Implement user group to user account
 
-## 8 Jun 2020 update
+## 8 Jun 2020 
 * Implement check user group 
 * Implement List users, get user info, update and delete user
 * Implement user group check and access token verify on above function
-* Append function to user\_guide.txt
+* Append function to user_guide.txt
 
-## 12 Jun 2020 update
+## 12 Jun 2020 
 * Implement Google login, Facebook login, generate email authorization code, make some enhancement on some user funtion
 * Implement cause, cause update, cause member, cause comment CRUD API
 * Add SQL script to create test data
 
-## 19 Jun 2020 update
+## 19 Jun 2020 
 * Implement Twitter and Apple login API for backend server handling on login token verification
 * Implement get avatar function on users module, mobile able to use the build-in loader to load the image 
 * Enhance Facebook login API to retrieve email and avatar
-* Add causes action related CRUD API (karely\_causes\_action, karely\_cause\_action\_todo, karely\_causes\_action\_todo\_volunteer, karely\_causes\_action\_fundraising, karely\_causes\_action\_product)
+* Add causes action related CRUD API (karely_causes_action, karely_cause_action_todo, karely_causes_action_todo_volunteer, karely_causes_action_fundraising, karely_causes_action_product)
 * Enhance or fix bug on last week causes related API (attach user info in some causes response, permisson check on delete and update)
 
-## 26 Jun 2020 update
+## 26 Jun 2020 
 * Implement user stat and setting CRUD API 
 * Update the sign up function to create stat and setting record with default value
-* Schema update (karely\_audit, karely\_cause\_user\_setting)
+* Schema update (karely_audit, karely_cause_user_setting)
 * Enhance causes and cause actions various API (add filter, sort order, enrich output with user info, permission check and get cause's banner)
 * Bug fix on previous week implement API (increase request message parser size to 50MB and a few typo bug)
-* Append new function, parameter and feature to user\_guide.txt and cause\_guide.txt
+* Append new function, parameter and feature to user_guide.txt and cause_guide.txt
 
 ## 3 Jul 2020
-* Schema change (add karely\_cause\_category table and change karely\_cause\_action\_todo table)
+* Schema change (add karely_cause_category table and change karely_cause_action_todo table)
 * Enhance login for password failed count and check (lock account after 5 failed)
 * Enhance the update avatar and avatar loading function
 * Implement and create cause notification setting for each related user (owner, follower and admin)
